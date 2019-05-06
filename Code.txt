@@ -1,0 +1,118 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Challenge_1
+{
+    public partial class frm_Main : Form
+    {
+        double dob_Dice_Roll_Count = new double();
+        int int_Dice_Roll_New = new int();
+        int dob_Dice_Results_Total = new int();
+        int int_Dice_Roll_Needed = new int();
+        double dob_Dice_Results_Average = new double();
+        int int_Dice_Roll_Min = new int();
+        int int_Dice_Roll_Max = new int();
+        int[] int_Dice_Rolls_Done = new int[16 * 16 * 16 * 16 * 16 * 16 * 16];
+        Random rnd_Main = new Random();
+        public frm_Main()
+        {
+            InitializeComponent();
+        }
+        
+        private void btn_End_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btn_Start_Click(object sender, EventArgs e)
+        {
+
+            bool isNumeric_1 = int.TryParse(txb_Dice_Rolls.Text, out int a);
+            bool isNumeric_2 = int.TryParse(txb_Dice_Sides_Min.Text, out int b);
+            bool isNumeric_3 = int.TryParse(txb_Dice_Sides_Max.Text, out int c);
+
+            bool isBlank_1 = txb_Dice_Rolls.Text == "";
+            bool isBlank_2 = txb_Dice_Sides_Min.Text == "";
+            bool isBlank_3 = txb_Dice_Sides_Max.Text == "";
+
+            if (isNumeric_1 == true && isNumeric_2 == true && isNumeric_3 == true)
+            {
+                if (isNumeric_1 == true && isNumeric_2 == true && isNumeric_3 == true)
+                {
+                    dob_Dice_Roll_Count = 0;
+                    dob_Dice_Results_Total = 0;
+                    txb_Rolls_Results.Text = "";
+                    int_Dice_Roll_Min = Convert.ToInt32(txb_Dice_Sides_Min.Text);
+                    int_Dice_Roll_Max = Convert.ToInt32(txb_Dice_Sides_Max.Text);
+                    int_Dice_Roll_Needed = Convert.ToInt32(txb_Dice_Rolls.Text);
+                    tmr_Main.Enabled = true;
+                    /*for (dob_Dice_Roll_Count = 0; dob_Dice_Roll_Count < int_Dice_Roll_Needed; dob_Dice_Roll_Count++)
+                    {
+                        int_Dice_Roll_New = rnd_Main.Next(int_Dice_Roll_Min, int_Dice_Roll_Max + 1);
+                        int_Dice_Rolls_Done[Convert.ToInt32(dob_Dice_Roll_Count)] = int_Dice_Roll_New;
+                        dob_Dice_Results_Total += int_Dice_Roll_New;
+                        txb_Rolls_Results.Text += Convert.ToString(int_Dice_Roll_New) + " ";
+                    }
+                    dob_Dice_Results_Average = dob_Dice_Results_Total / dob_Dice_Roll_Count;
+                    txb_Average.Text = Convert.ToString(dob_Dice_Results_Average);
+                    txb_Total.Text = Convert.ToString(dob_Dice_Results_Total);*/
+                }
+                else
+                {
+                    MessageBox.Show("One (or more) of the textboxes contains letters or symbols.", "Incompatable info");
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("One (or more) of the textboxes contains nothing.", "Missing info");
+            }
+        }
+
+        private void btn_New_Click(object sender, EventArgs e)
+        {
+            int_Dice_Roll_Needed = 0;
+            int_Dice_Roll_Min = 1;
+            int_Dice_Roll_Max = 10;
+            dob_Dice_Roll_Count = 0;
+
+            txb_Average.Text = "";
+            txb_Total.Text = "";
+            txb_Dice_Rolls.Text = "";
+            txb_Dice_Sides_Min.Text = "1";
+            txb_Dice_Sides_Max.Text = "10";
+
+        }
+
+        private void tmr_Main_Tick(object sender, EventArgs e)
+        {
+            int_Dice_Roll_New = rnd_Main.Next(int_Dice_Roll_Min, int_Dice_Roll_Max + 1);
+            int_Dice_Rolls_Done[Convert.ToInt32(dob_Dice_Roll_Count)] = int_Dice_Roll_New;
+            dob_Dice_Results_Total += int_Dice_Roll_New;
+            txb_Rolls_Results.Text += Convert.ToString(int_Dice_Roll_New) + " ";
+            dob_Dice_Roll_Count ++;
+            if (dob_Dice_Roll_Count >= int_Dice_Roll_Needed)
+            {
+                dob_Dice_Results_Average = dob_Dice_Results_Total / dob_Dice_Roll_Count;
+                txb_Average.Text = Convert.ToString(dob_Dice_Results_Average);
+                txb_Total.Text = Convert.ToString(dob_Dice_Results_Total);
+                tmr_Main.Enabled = false;
+            }
+        }
+
+        private void btn_Stop_Click(object sender, EventArgs e)
+        {
+            dob_Dice_Results_Average = dob_Dice_Results_Total / dob_Dice_Roll_Count;
+            txb_Average.Text = Convert.ToString(dob_Dice_Results_Average);
+            txb_Total.Text = Convert.ToString(dob_Dice_Results_Total);
+            tmr_Main.Enabled = false;
+        }
+    }
+}
